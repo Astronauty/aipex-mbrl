@@ -1,0 +1,18 @@
+{
+	"nodes":[
+		{"id":"5fd46464dfc0215d","type":"group","x":-480,"y":440,"width":1880,"height":1040,"label":"MBRL Runners"},
+		{"id":"531591dd0a3dc83b","type":"group","x":-508,"y":1820,"width":1880,"height":1040,"label":"Policy Classes"},
+		{"id":"7d23cb434bb4a6e3","type":"group","x":-480,"y":-840,"width":1840,"height":1040,"label":"Dynamics Template Class"},
+		{"id":"62fc4c530dc6f3f6","type":"text","text":"## MBRL Template Class\n- Tensorboard/WANDB Logging\n- Training configuration\n- Simulated Dynamics Rollouts\n\nMust implement:","x":-440,"y":480,"width":1560,"height":340},
+		{"id":"5782c5fef398633b","type":"text","text":"## Dynamics Template Class (nn.module)\n- Prior observation window\n- Prior action window\n- Number of states \n- Number of actions\n\n- Standard loss functions\n\t- single step MSE loss\n\t- long horizon MSE loss\n\nMust implement:\n- Single step forward\n- Autoregressive forward (should this just be predefined based on single step forward?)","x":-480,"y":-840,"width":1740,"height":520},
+		{"id":"ed5a1a986a5141aa","type":"text","text":"## Online Planning Class","x":-440,"y":980,"width":760,"height":480},
+		{"id":"1babcdcb89cb4f5b","type":"text","text":"## Offline Planning Class","x":560,"y":980,"width":680,"height":480},
+		{"id":"45ba7077b7f967fd","type":"text","text":"##  RSSM (Dreamer)","x":-480,"y":-280,"width":559,"height":355},
+		{"id":"9c89de83b9af84ab","type":"text","text":"## Model Free\n","x":-120,"y":1960,"width":240,"height":90},
+		{"id":"b873fc1c6646a8bd","x":380,"y":1915,"width":360,"height":180,"type":"text","text":"## Model Based\n"}
+	],
+	"edges":[
+		{"id":"8254c2da6287bd5d","fromNode":"62fc4c530dc6f3f6","fromSide":"bottom","toNode":"ed5a1a986a5141aa","toSide":"top"},
+		{"id":"cce72b240fe79b7b","fromNode":"62fc4c530dc6f3f6","fromSide":"bottom","toNode":"1babcdcb89cb4f5b","toSide":"top"}
+	]
+}
