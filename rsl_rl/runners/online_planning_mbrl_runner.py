@@ -14,4 +14,17 @@ class OnlinePlanningMBRLRunner(MBRLRunner):
 
         pass
 
-    def
+    def learn(self):
+        # Collect data f
+
+        # Initialize state by sampling environment
+        obs = self.env.get_observations().to(self.device)
+        
+        # Initialize Data Buffer
+        self.
+
+        # Initialize Model (handled in constructor of MBRLRunner)
+        
+
+    def update_model
+

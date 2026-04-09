@@ -1,4 +1,6 @@
 import torch
+
+from rsl_rl.env import VecEnv
 from rsl_rl.runners.mbrl_runner import MBRLRunner
 
 class OnlinePlanningMBRLRunner(MBRLRunner):

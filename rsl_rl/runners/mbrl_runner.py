@@ -25,8 +25,11 @@ class MBRLRunner(ABC):
         self.device = device
         
         self._configure_multi_gpu()
+
+        # Get observations from env to establish size of obs space
         obs = self.env.get_observations()
 
+        # Define policy
         self.alg_cfg = train_cfg["algorithm"]
 
 
@@ -42,8 +45,40 @@ class MBRLRunner(ABC):
              history_horizon_length=self.dynamics_model_cfg["history_horizon_length"]
         )
 
+        # Define buffers to store data
+        self.dynamics_data_buffer = 
+        
+        # Define value function? 
+
+        # Initialize policy
+
+
         pass
 
+    def learn(self):
+
+        pass
+
+    @abstractmethod
+    def update_dynamics_model(self, dynamics_model, traj) -> None:
+        """Update self.dynamics model based on sampled trajectories. These trajectories can be sampled 
+        either from the sim environment or a replay buffer.
+
+        Returns
+        - M : updated dynamics model       
+        """
+        return NotImplemented
+
+
+    @abstractmethod
+    def update_policy(self, policy, value_function, traj):
+        """Update self."""
+        return NotImplemented
+    
+
+    @abstractmethod 
+    def rollout(self, state, policy, ):
+        return NotImplemented
 
 
     def add_git_repo_to_log(self, repo_file_path: str) -> None:
