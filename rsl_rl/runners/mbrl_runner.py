@@ -7,6 +7,7 @@ import statistics
 import time
 import warnings
 from collections import deque
+from tensordict import TensorDict
 
 import rsl_rl
 from rsl_rl.env import VecEnv
@@ -22,22 +23,20 @@ class MBRLRunner(ABC):
     def __init__(self, env: VecEnv, train_cfg: dict, log_dir: str | None = None, device="cpu"):
         self.env=env
         self.cfg = train_cfg
+        # Policy cfg only instantiated in children where policy is required (offline planning, and some online planning like TD-MPC)
+        self.alg_cfg = train_cfg["algorithm"]
         self.device = device
         
         self._configure_multi_gpu()
 
         # Get observations from env to establish size of obs space
         obs = self.env.get_observations()
-
-        # Define policy
-        self.alg_cfg = train_cfg["algorithm"]
-
+        # self.cfg["obs_groups"] = resolve_obs_groups(obs, self.cfg["obs_groups"], self._get_default_obs_sets())
 
         # Construct the dynamics model used for MBRL algorithms
         self.dynamics_model_cfg = self.alg_cfg["dynamics_model"]
-        self.dynamics_model = self.dynamics_model_cfg
 
-        DynamicsClass = getattr(rsl_rl.modules, self.dynamics_model_cfg["class_name"])
+        DynamicsClass = getattr(rsl_rl.modules, self.dynamics_model_cfg["class_name"]) # Find the correct dynamics class based on config
         self.dynamics_model = DynamicsClass(
              state_dim=self.dynamics_model_cfg["state_dim"],
              action_dim=self.dynamics_model_cfg["action_dim"],
@@ -45,17 +44,35 @@ class MBRLRunner(ABC):
              history_horizon_length=self.dynamics_model_cfg["history_horizon_length"]
         )
 
-        # Define buffers to store data
+        # Initialize storage for imagined rollouts w/ the learned dynamics mdoel
         self.dynamics_data_buffer = 
+
+
+        # Initialize storage for simulated rollouts (via IsaacLAB)
         
         # Define value function? 
 
         # Initialize policy
 
 
+        # Initialize logger
+        self.logger = Logger(log_dir=log_dir,
+                             cfg=self.cfg,
+                             num_envs=self.env.num_envs,
+                             is_distributed=self.is_distributed,
+                             gpu_world_size=self.gpu_world_size,
+                             gpu_global_rank=self.gpu_global_rank,
+                             device=self.device)
+
+
+        self.current_learning_iteration = 0
         pass
 
+    @abstractmethod
     def learn(self):
+        """
+        Main learning loop for MBRL algorithms.
+        """
 
         pass
 
@@ -129,3 +146,8 @@ class MBRLRunner(ABC):
         torch.distributed.init_process_group(backend="nccl", rank=self.gpu_global_rank, world_size=self.gpu_world_size)
         # Set device to the local rank
         torch.cuda.set_device(self.gpu_local_rank)
+
+
+    @abstractmethod
+    def _construct_algorithm(self, obs: TensorDict):
+        return NotImplementedError
